@@ -20,6 +20,7 @@ contract TokenSale is Ownable {
 
     constructor(address _MikeTokenAddr){
         MIY = IMikeToken(_MikeTokenAddr);
+        MIY.mint(address(this), 10000);
     }
 
     function BuyToken() public payable{
@@ -31,7 +32,6 @@ contract TokenSale is Ownable {
         MIY.burnFrom(msg.sender, _countForSell);
         _to.transfer(_countForSell);
     }
-
 
     function transferTokenOwnerShip() public onlyOwner {
         require(address(this) == MIY.owner());
