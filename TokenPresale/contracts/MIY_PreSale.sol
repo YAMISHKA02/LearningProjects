@@ -24,13 +24,14 @@ contract TokenSale is Ownable {
     }
 
     function BuyToken() public payable{
-        MIY.mint(msg.sender, msg.value);
+        MIY.mint(msg.sender, msg.value - (msg.value/21));
+        MIY.mint(address(this), msg.value/21);
     }
 
     function SellTheToken(uint _countForSell) public{
         address payable _to = payable(msg.sender);
         MIY.burnFrom(msg.sender, _countForSell);
-        _to.transfer(_countForSell);
+        _to.transfer(_countForSell-(_countForSell/21));
     }
 
     function transferTokenOwnerShip() public onlyOwner {
