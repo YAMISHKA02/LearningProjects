@@ -12,22 +12,25 @@ interface IMikeToken{
     function transferFrom(address _from, address _to, uint _amount) external;
     function transferOwnership(address _newOwner) external;
     function owner() external returns(address);
+    function mint(address _to, uint256 _amount) external;
+    function burnFrom(address _from, uint _amount) external;
 }
 contract TokenSale is Ownable {
     IMikeToken MIY;
-    uint SaleTime;
-    
-    constructor(address _MikeTokenAddr, uint _SaleTimeInHours){
+
+    constructor(address _MikeTokenAddr){
         MIY = IMikeToken(_MikeTokenAddr);
-        SaleTime = _SaleTimeInHours * (60*60);
     }
 
-    uint endOfSelling = SaleTime + block.timestamp;
-    
-    function BuyToken(uint amount) public payable{
-        
+    function BuyToken() public payable{
+        MIY.mint(msg.sender, msg.value);
     }
 
+    function SellTheToken(uint _countForSell) public{
+        address payable _to = payable(msg.sender);
+        MIY.burnFrom(msg.sender, _countForSell);
+        _to.transfer(_countForSell);
+    }
 
 
     function transferTokenOwnerShip() public onlyOwner {
